@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruleta de la Trivia · Hábitos saludables</title>
+<style>
+:root {
+  --site-primary: #ef6fa6;
+  --site-secondary: #6ac9ef;
+  --site-background: #fff7fb;
+  --site-on-primary: #ffffff;
+  --site-on-secondary: #15234e;
+  --site-on-background: #17224b;
+  --site-font-body: "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --site-font-heading: "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  color-scheme: light dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+#app { min-height: 100vh; width: 100%; border-radius: 0; overflow: hidden; position: relative; display:flex; flex-direction:column; align-items:center; padding: clamp(14px, 2.5vh, 28px) clamp(12px, 3vw, 40px) 22px; background-color: var(--site-background); }
+.decor { position:absolute; pointer-events:none; opacity:var(--site-decoration-opacity); font-size:clamp(20px,3vw,38px); z-index:0; }
+.d1 { top:7%; left:4%; transform:rotate(-14deg); } .d2 { top:16%; right:5%; transform:rotate(13deg); } .d3 { bottom:8%; left:6%; } .d4 { bottom:12%; right:6%; }
+header { z-index:1; text-align:center; width:100%; margin-bottom: clamp(5px,1.5vh,18px); }
+.kicker { display:inline-block; background:#fff; border:2px dashed #f3a5c4; border-radius:999px; padding:7px 18px; color:#b52d67; font-size:clamp(11px,1.3vw,15px); font-weight:900; letter-spacing:.12em; }
+h1 { font-family:var(--site-font-heading); font-size:calc(clamp(25px, 4.4vw, 52px) * var(--site-heading-scale)); line-height:1.04; margin:12px 0 4px; font-weight:1000; color:#19234e; text-shadow:2px 3px 0 #fff; }
+h1 .rainbow { color:#ed5796; }
+.subtitle { font-size:clamp(13px,1.7vw,19px); font-weight:800; margin:0; color:#4b5780; }
+.stage { width:min( min(70vh, 680px), 76vw); aspect-ratio:1; max-width:100%; position:relative; z-index:1; flex:0 1 auto; margin:clamp(4px,1vh,12px) 0 12px; }
+.wheel-frame { width:100%; height:100%; border-radius:50%; padding:clamp(5px,1vw,12px); background:#fff; box-shadow:0 10px 0 #f4c4d7, 0 16px 30px #27345a20; border:3px solid #f5a9c9; }
+#wheel { width:100%; height:100%; display:block; border-radius:50%; transform:rotate(0deg); }
+.pointer { position:absolute; top:-5px; left:50%; transform:translateX(-50%); z-index:4; width:0;height:0; border-left:clamp(17px,2.5vw,26px) solid transparent; border-right:clamp(17px,2.5vw,26px) solid transparent; border-top:clamp(38px,5vw,52px) solid #19234e; filter:drop-shadow(0 3px 0 #fff); }
+.pointer::after { content:""; position:absolute; left:50%; top:-45px; transform:translateX(-50%); width:clamp(12px,1.6vw,18px); height:clamp(12px,1.6vw,18px); border-radius:50%; background:#ffe15b; border:3px solid #fff; }
+.actions { display:flex; flex-direction:column; align-items:center; gap:10px; z-index:2; width:min(100%,500px); }
+#spin { border:0; border-radius:999px; padding:15px 42px; min-width:min(80vw,280px); background:linear-gradient(135deg,#ff6ca5,#f34f87); color:white; font:1000 clamp(19px,2.5vw,25px) var(--site-font-heading); letter-spacing:.08em; box-shadow:0 7px 0 #bc3c70, 0 10px 20px #d9487d35; cursor:pointer; transition:transform .15s,box-shadow .15s; }
+#spin:hover { transform:translateY(-2px); box-shadow:0 9px 0 #bc3c70,0 12px 22px #d9487d40; }
+#spin:active { transform:translateY(4px); box-shadow:0 3px 0 #bc3c70; }
+#spin:disabled { opacity:.75; cursor:wait; }
+#result { min-height:1.6em; text-align:center; font-size:clamp(16px,2.2vw,24px); font-weight:1000; color:#19234e; }
+#result small { display:block; font-size:clamp(12px,1.3vw,15px); font-weight:700; color:#697293; margin-top:3px; }
+footer { margin-top:auto; padding-top:8px; font-size:clamp(10px,1.2vw,13px); color:#78809b; text-align:center; z-index:1; }
+@media (min-height:800px) { .stage { width:min( min(60vh, 690px), 70vw); } }
+@media (max-height:650px) { #app {padding-top:8px;padding-bottom:8px;} header{margin-bottom:0;} h1{margin:5px 0 2px;font-size:clamp(22px,4vh,34px);} .kicker{padding:4px 12px;} .stage{width:min(55vh, 56vw); margin:3px 0 5px;} #spin{padding:9px 28px;} footer{padding-top:4px;} }
+@media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+</style>
+</head>
+<body>
+<main id="app">
+  <div class="decor d1" aria-hidden="true">💗</div><div class="decor d2" aria-hidden="true">⭐</div><div class="decor d3" aria-hidden="true">✨</div><div class="decor d4" aria-hidden="true">🌈</div>
+  <header>
+    <div class="kicker">¡APRENDEMOS JUGANDO!</div>
+    <h1><span class="rainbow">RULETA</span> DE LA TRIVIA</h1>
+    <p class="subtitle">Hábitos saludables · ¡Gira y descubre tu categoría!</p>
+  </header>
+  <section class="stage" aria-label="Ruleta con seis categorías">
+    <div class="pointer" aria-hidden="true"></div>
+    <div class="wheel-frame"><canvas id="wheel" width="1000" height="1000" role="img" aria-label="Ruleta con las categorías alimentación saludable, hidratación, actividad física, descanso y sueño, higiene y aseo personal, cuidado de la mente y emociones"></canvas></div>
+  </section>
+  <section class="actions">
+    <button id="spin" type="button">🎡 GIRAR 🎡</button>
+    <div id="result" aria-live="polite">¿Qué categoría te tocará?<small>Presiona GIRAR para comenzar</small></div>
+  </section>
+  <footer>Ruleta de la Trivia · Hábitos saludables</footer>
+</main>
+<script>
+(() => {
+  const canvas = document.getElementById('wheel');
+  const ctx = canvas.getContext('2d');
+  const button = document.getElementById('spin');
+  const result = document.getElementById('result');
+  const categories = [
+    { name: 'ALIMENTACIÓN SALUDABLE', emoji: '🍎', color: '#f58db8' },
+    { name: 'HIDRATACIÓN', emoji: '💧', color: '#67c8f0' },
+    { name: 'ACTIVIDAD FÍSICA', emoji: '🏃', color: '#ffd84f' },
+    { name: 'DESCANSO Y SUEÑO', emoji: '🌙', color: '#b99af5' },
+    { name: 'HIGIENE Y ASEO PERSONAL', emoji: '🪥', color: '#65dcc0' },
+    { name: 'CUIDADO DE LA MENTE Y EMOCIONES', emoji: '💗', color: '#ffa69b' }
+  ];
+  const n = categories.length;
+  const arc = Math.PI * 2 / n;
+  let rotation = 0;
+  let spinning = false;
+  function drawWheel() {
+    const cx = 500, cy = 500, radius = 482;
+    ctx.clearRect(0, 0, 1000, 1000);
+    categories.forEach((cat, i) => {
+      const start = -Math.PI / 2 + i * arc;
+      const end = start + arc;
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, radius, start, end); ctx.closePath();
+      ctx.fillStyle = cat.color; ctx.fill();
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 10; ctx.stroke();
+      const mid = start + arc / 2;
+      ctx.save(); ctx.translate(cx + Math.cos(mid) * 315, cy + Math.sin(mid) * 315); ctx.rotate(mid + Math.PI / 2);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = '64px "Apple Color Emoji", "Segoe UI Emoji", sans-serif'; ctx.fillText(cat.emoji, 0, -60);
+      const words = cat.name.split(' ');
+      let lines = [], line = '';
+      const maxWidth = 270;
+      ctx.font = 'bold 30px Trebuchet MS, Arial, sans-serif';
+      words.forEach(word => {
+        const test = line ? line + ' ' + word : word;
+        if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = word; } else line = test;
+      });
+      if (line) lines.push(line);
+      const lineHeight = 35;
+      const startY = (lines.length > 2 ? -2 : 0) - ((lines.length - 1) * lineHeight / 2);
+      lines.forEach((text, j) => {
+        ctx.lineWidth = 7; ctx.lineJoin = 'round'; ctx.strokeStyle = 'rgba(255,255,255,.95)';
+        ctx.strokeText(text, 0, startY + j * lineHeight);
+        ctx.fillStyle = '#17234c'; ctx.fillText(text, 0, startY + j * lineHeight);
+      });
+      ctx.restore();
+    });
+    ctx.beginPath(); ctx.arc(cx, cy, 92, 0, Math.PI * 2); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 12; ctx.strokeStyle = '#19234e'; ctx.stroke();
+    ctx.fillStyle = '#19234e'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = 'bold 31px Trebuchet MS, Arial, sans-serif';
+    ctx.fillText('¡GIRA!', cx, cy - 18); ctx.fillText('Y JUEGA', cx, cy + 22);
+  }
+  drawWheel();
+  function chosenIndex(deg) {
+    const normalized = ((deg % 360) + 360) % 360;
+    // The fixed pointer is at 12 o'clock; account for the initial sector starting there.
+    return Math.floor((((360 - normalized) % 360) + 30) % 360 / 60);
+  }
+  button.addEventListener('click', () => {
+    if (spinning) return;
+    spinning = true; button.disabled = true; result.textContent = '¡La ruleta está girando! ✨';
+    const current = ((rotation % 360) + 360) % 360;
+    const targetSector = Math.floor(Math.random() * n);
+    // Center the chosen sector under the top pointer. Sector 0 is centered at 30 degrees clockwise from top.
+    const desired = ((360 - (targetSector * 60 + 30)) % 360 + 360) % 360;
+    const extraTurns = 6 + Math.floor(Math.random() * 4);
+    const endRotation = rotation + extraTurns * 360 + ((desired - current + 360) % 360);
+    const start = performance.now();
+    const duration = 4300;
+    const startRotation = rotation;
+    function animate(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const ease = 1 - Math.pow(1 - t, 4);
+      rotation = startRotation + (endRotation - startRotation) * ease;
+      canvas.style.transform = `rotate(${rotation}deg)`;
+      if (t < 1) requestAnimationFrame(animate);
+      else {
+        rotation = endRotation % 360;
+        canvas.style.transform = `rotate(${rotation}deg)`;
+        result.innerHTML = `${categories[targetSector].emoji} ¡TE TOCÓ: ${categories[targetSector].name}! ${categories[targetSector].emoji}<small>¡Busca una pregunta de esta categoría y responde!</small>`;
+        button.disabled = false; spinning = false;
+      }
+    }
+    requestAnimationFrame(animate);
+  });
+})();
+</script>
+</body>
+</html>
